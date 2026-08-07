@@ -1,0 +1,165 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Fast_fourier_transform"
+        x:Class="Fast_fourier_transform.ChartOptionWindow"
+        Title="Chart Option"
+        Width="564" Height="345"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        ShowInTaskbar="False">
+
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,8,8">
+            <Button Content="Update" Width="98" Height="32" Margin="0,0,8,0" Click="OnUpdateClick"/>
+            <Button Content="Close" Width="98" Height="32" Click="OnCloseClick"/>
+        </StackPanel>
+
+        <TabControl Name="TabControlChart" Margin="8">
+            <!-- Format Chart Area Tab -->
+            <TabItem Name="TabPageChartArea" Header="Format Chart Area">
+                <StackPanel Margin="16">
+                    <DockPanel Margin="0,0,0,16">
+                        <TextBlock Text="Chart Title :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="130"/>
+                        <TextBox Name="TextBoxChartTitle" Width="280"/>
+                    </DockPanel>
+                    <CheckBox Name="CheckBoxShowChartTitle" Content="Show chart title" Margin="0,0,0,16"/>
+                    <DockPanel>
+                        <TextBlock Text="Axis color :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="130"/>
+                        <Button Name="ButtonAxisColor" Width="46" Height="23" Click="OnAxisColorClick"
+                                Background="#0066CC"/>
+                    </DockPanel>
+                </StackPanel>
+            </TabItem>
+
+            <!-- Format Horizontal Axis Tab -->
+            <TabItem Name="TabPageHorizontalAxis" Header="Format Horizontal Axis">
+                <StackPanel Margin="16">
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Horizontal Axis Title :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="180"/>
+                        <TextBox Name="TextBoxHAxisTitle" Width="230"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Horizontal Maximum Bounds :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="180"/>
+                        <TextBox Name="TextBoxHMaxBounds" Width="100"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Horizontal Minimum Bounds :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="180"/>
+                        <TextBox Name="TextBoxHMinBounds" Width="100"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Major Units :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="120"/>
+                        <TextBox Name="TextBoxHMajorUnits" Width="100"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Minor Units :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="120"/>
+                        <TextBox Name="TextBoxHMinorUnits" Width="100"/>
+                    </DockPanel>
+                    <CheckBox Name="CheckBoxHMajorGridlines" Content="Major Gridlines" Margin="0,0,0,8"/>
+                    <CheckBox Name="CheckBoxHMinorGridlines" Content="Minor Gridlines" Margin="0,0,0,8"/>
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Name="RadioButtonHAutomatic" Content="Automatic" GroupName="HGroup"
+                                     IsCheckedChanged="OnHAutomaticChanged"/>
+                        <RadioButton Name="RadioButtonHAxisValue" Content="Axis value" GroupName="HGroup"
+                                     IsChecked="True" IsCheckedChanged="OnHAxisValueChanged" Margin="16,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+            <!-- Format Vertical Axis Tab -->
+            <TabItem Name="TabPageVerticalAxis" Header="Format Vertical Axis">
+                <StackPanel Margin="16">
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Vertical Axis Title :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="165"/>
+                        <TextBox Name="TextBoxVAxisTitle" Width="230"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Vertical Maximum Bounds :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="165"/>
+                        <TextBox Name="TextBoxVMaxBounds" Width="100"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Vertical Minimum Bounds :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="165"/>
+                        <TextBox Name="TextBoxVMinBounds" Width="100"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Major Units :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="120"/>
+                        <TextBox Name="TextBoxVMajorUnits" Width="100"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Minor Units :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="120"/>
+                        <TextBox Name="TextBoxVMinorUnits" Width="100"/>
+                    </DockPanel>
+                    <CheckBox Name="CheckBoxVMajorGridlines" Content="Major Gridlines" Margin="0,0,0,8"/>
+                    <CheckBox Name="CheckBoxVMinorGridlines" Content="Minor Gridlines" Margin="0,0,0,8"/>
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Name="RadioButtonVAutomatic" Content="Automatic" GroupName="VGroup"
+                                     IsCheckedChanged="OnVAutomaticChanged"/>
+                        <RadioButton Name="RadioButtonVAxisValue" Content="Axis value" GroupName="VGroup"
+                                     IsChecked="True" IsCheckedChanged="OnVAxisValueChanged" Margin="16,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+            <!-- Format Data Series Tab -->
+            <TabItem Name="TabPageDataSeries" Header="Format Data Series">
+                <StackPanel Margin="16">
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Data Series List :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="120"/>
+                        <ComboBox Name="ComboBoxDataSeriesList" Width="200"
+                                  SelectionChanged="OnDataSeriesListChanged"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Data Series Title :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="120"/>
+                        <TextBox Name="TextBoxDataSeriesTitle" Width="200"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Data series color :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="120"/>
+                        <Button Name="ButtonDataColor" Width="52" Height="23" Click="OnDataColorClick"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Chart type :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="120"/>
+                        <ComboBox Name="ComboBoxChartType" Width="200">
+                            <ComboBoxItem Content="Scatter"/>
+                            <ComboBoxItem Content="Straight line"/>
+                            <ComboBoxItem Content="Straight line with markers"/>
+                            <ComboBoxItem Content="Smooth line"/>
+                            <ComboBoxItem Content="Smooth line with markers"/>
+                        </ComboBox>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Marker type :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="120"/>
+                        <ComboBox Name="ComboBoxMarkerType" Width="200">
+                            <ComboBoxItem Content="Circle"/>
+                            <ComboBoxItem Content="Filled Circle"/>
+                            <ComboBoxItem Content="Rectangle"/>
+                            <ComboBoxItem Content="Filled Rectangle"/>
+                            <ComboBoxItem Content="Triangle"/>
+                            <ComboBoxItem Content="Filled Triangle"/>
+                        </ComboBox>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Line Width :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="120"/>
+                        <ComboBox Name="ComboBoxLineWidth" Width="94">
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                        </ComboBox>
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <TextBlock Text="Line pattern :" DockPanel.Dock="Left" VerticalAlignment="Center" Width="120"/>
+                        <ComboBox Name="ComboBoxLinePattern" Width="200">
+                            <ComboBoxItem Content="Solid"/>
+                            <ComboBoxItem Content="Dash pattern 3-1"/>
+                            <ComboBoxItem Content="Dash pattern 4-1"/>
+                            <ComboBoxItem Content="Dash pattern 1-3"/>
+                            <ComboBoxItem Content="Dash pattern 1-1"/>
+                            <ComboBoxItem Content="Dash pattern 3-1-1-1"/>
+                            <ComboBoxItem Content="Dash pattern 4-2-2-2"/>
+                        </ComboBox>
+                    </DockPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

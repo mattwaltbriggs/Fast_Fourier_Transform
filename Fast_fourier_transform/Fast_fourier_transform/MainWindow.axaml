@@ -1,0 +1,91 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Fast_fourier_transform"
+        x:Class="Fast_fourier_transform.MainWindow"
+        Title="Fast Fourier Transform"
+        Width="1280" Height="720"
+        MinWidth="1060" MinHeight="720"
+        WindowStartupLocation="CenterScreen">
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Import Data" Click="OnImportClick"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Click="OnExitClick"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Paste from Excel" Click="OnPasteClick"/>
+                <MenuItem Header="_Clear Data" Click="OnClearDataClick"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid ColumnDefinitions="*,6,*">
+            <!-- Left Panel: Time Domain -->
+            <DockPanel Grid.Column="0" Margin="8">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8">
+                    <TextBlock Text="Time Domain" FontSize="18" FontWeight="Bold"
+                               VerticalAlignment="Center" Margin="0,0,20,0"/>
+                    <Button Content="Import" Width="110" Height="35" Margin="0,0,5,0"
+                            Click="OnImportClick"/>
+                    <Button Content="Chart" Width="110" Height="35" Margin="0,0,5,0"
+                            Click="OnTdChartClick"/>
+                </StackPanel>
+
+                <DataGrid Name="TimeDomainGrid"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="False"
+                          GridLinesVisibility="Horizontal"
+                          HeadersVisibility="Column"
+                          CanUserResizeColumns="True"
+                          CanUserSortColumns="True"
+                          SelectionMode="Single"
+                          DockPanel.Dock="Bottom"
+                          Margin="0,0,0,8"
+                          Height="550">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Time (s)" Binding="{Binding Time}" Width="150"/>
+                        <DataGridTextColumn Header="Amplitude" Binding="{Binding Amplitude}" Width="150"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Button Content="FFT" Width="110" Height="38" DockPanel.Dock="Bottom"
+                        HorizontalAlignment="Right" Margin="0,0,0,5"
+                        Click="OnFftClick"/>
+            </DockPanel>
+
+            <GridSplitter Grid.Column="1" Width="6" ResizeDirection="Columns"
+                          Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"/>
+
+            <!-- Right Panel: Frequency Domain -->
+            <DockPanel Grid.Column="2" Margin="8">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8">
+                    <TextBlock Text="Frequency Domain" FontSize="18" FontWeight="Bold"
+                               VerticalAlignment="Center" Margin="0,0,20,0"/>
+                    <Button Content="Chart" Width="110" Height="35" Margin="0,0,5,0"
+                            Click="OnFdChartClick"/>
+                </StackPanel>
+
+                <DataGrid Name="FrequencyDomainGrid"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          GridLinesVisibility="Horizontal"
+                          HeadersVisibility="Column"
+                          CanUserResizeColumns="True"
+                          CanUserSortColumns="True"
+                          SelectionMode="Single"
+                          Height="550">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Frequency (Hz)" Binding="{Binding Frequency}" Width="150"/>
+                        <DataGridTextColumn Header="Magnitude" Binding="{Binding Magnitude}" Width="150"/>
+                        <DataGridTextColumn Header="Phase" Binding="{Binding Phase}" Width="120"/>
+                        <DataGridTextColumn Header="Real" Binding="{Binding Real}" Width="120"/>
+                        <DataGridTextColumn Header="Img" Binding="{Binding Img}" Width="120"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Grid>
+
+        <TextBlock DockPanel.Dock="Bottom" Text="Ready" Margin="8,4"/>
+    </DockPanel>
+</Window>

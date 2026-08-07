@@ -1,0 +1,23 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Fast_fourier_transform"
+        x:Class="Fast_fourier_transform.ChartViewWindow"
+        Title="Chart View"
+        Width="800" Height="450"
+        MinWidth="800" MinHeight="400"
+        WindowStartupLocation="CenterOwner">
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Chart Element">
+                <MenuItem Header="Format Chart Area" Click="OnFormatChartArea"/>
+                <MenuItem Header="Format Horizontal Axis" Click="OnFormatHorizontalAxis"/>
+                <MenuItem Header="Format Vertical Axis" Click="OnFormatVerticalAxis"/>
+                <MenuItem Header="Format Data Series" Click="OnFormatDataSeries"/>
+            </MenuItem>
+            <MenuItem Header="Data Series" Name="DataSeriesMenu"/>
+        </Menu>
+
+        <local:ChartCanvas Name="ChartCanvasControl"/>
+    </DockPanel>
+</Window>
