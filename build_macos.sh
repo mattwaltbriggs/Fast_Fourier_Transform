@@ -7,11 +7,10 @@ VERSION="1.0.0"
 PUBLISH_DIR="publish"
 BUILD_DIR="build"
 
-echo "=== Building universal macOS .app bundle ==="
+echo "=== Building macOS .app bundle ==="
 
 # Clean
 rm -rf "$PUBLISH_DIR" "$BUILD_DIR"
-mkdir -p "$PUBLISH_DIR/arm64" "$PUBLISH_DIR/x64"
 
 # Publish for arm64
 echo "--- Publishing arm64 ---"
@@ -35,35 +34,38 @@ dotnet publish Fast_fourier_transform/Fast_fourier_transform/Fast_fourier_transf
 
 # Create .app bundle structure
 APP_PATH="$BUILD_DIR/$APP_NAME.app"
-mkdir -p "$APP_PATH/Contents/MacOS"
+MACOS_DIR="$APP_PATH/Contents/MacOS"
+rm -rf "$APP_PATH"
+mkdir -p "$MACOS_DIR"
 mkdir -p "$APP_PATH/Contents/Resources"
 
-# Create universal binary with lipo
-echo "--- Creating universal binary ---"
-lipo -create \
-    "$PUBLISH_DIR/arm64/Fast_fourier_transform" \
-    "$PUBLISH_DIR/x64/Fast_fourier_transform" \
-    -output "$APP_PATH/Contents/MacOS/$APP_NAME"
-chmod +x "$APP_PATH/Contents/MacOS/$APP_NAME"
+# Copy arm64 publish output into Contents/MacOS/
+echo "--- Copying arm64 runtime ---"
+cp -R "$PUBLISH_DIR/arm64/"* "$MACOS_DIR/"
 
-# Copy managed assemblies (same for both architectures) from arm64 build
-echo "--- Copying managed assemblies ---"
-cp "$PUBLISH_DIR/arm64/"*.dll "$APP_PATH/Contents/MacOS/" 2>/dev/null || true
-cp "$PUBLISH_DIR/arm64/"*.json "$APP_PATH/Contents/MacOS/" 2>/dev/null || true
+# Create x64 subdirectory for Intel Macs
+echo "--- Copying x64 runtime ---"
+mkdir -p "$MACOS_DIR/x64"
+cp -R "$PUBLISH_DIR/x64/"* "$MACOS_DIR/x64/"
 
-# Copy native runtime libraries (arm64 and x64 in separate dirs)
-mkdir -p "$APP_PATH/Contents/MacOS/runtimes"
-cp -R "$PUBLISH_DIR/arm64/runtimes/osx-arm64" "$APP_PATH/Contents/MacOS/runtimes/" 2>/dev/null || true
-cp -R "$PUBLISH_DIR/x64/runtimes/osx-x64" "$APP_PATH/Contents/MacOS/runtimes/" 2>/dev/null || true
+# Rename the arm64 host executable so the launcher can reference it
+mv "$MACOS_DIR/Fast_fourier_transform" "$MACOS_DIR/Fast_fourier_transform_arm64"
 
-# Copy any other architecture-specific native deps
-for dir in "$PUBLISH_DIR/arm64/"*/; do
-    dirname=$(basename "$dir")
-    if [ "$dirname" != "runtimes" ] && [ -d "$dir" ]; then
-        mkdir -p "$APP_PATH/Contents/MacOS/$dirname"
-        cp -R "$dir"* "$APP_PATH/Contents/MacOS/$dirname/" 2>/dev/null || true
-    fi
-done
+# Also rename the x64 host executable
+mv "$MACOS_DIR/x64/Fast_fourier_transform" "$MACOS_DIR/x64/Fast_fourier_transform_x64"
+
+# Create launcher script
+cat > "$MACOS_DIR/$APP_NAME" << 'LAUNCHER'
+#!/bin/bash
+DIR="$(cd "$(dirname "$0")" && pwd)"
+ARCH=$(uname -m)
+if [ "$ARCH" = "arm64" ]; then
+    exec "$DIR/Fast_fourier_transform_arm64" "$@"
+else
+    exec "$DIR/x64/Fast_fourier_transform_x64" "$@"
+fi
+LAUNCHER
+chmod +x "$MACOS_DIR/$APP_NAME"
 
 # Create Info.plist
 cat > "$APP_PATH/Contents/Info.plist" << PLIST
@@ -104,13 +106,14 @@ echo "--- Bundle created at $APP_PATH ---"
 # Create zip archive
 echo "--- Creating archive ---"
 cd "$BUILD_DIR"
-zip -r -y "../FFT_Universal_macOS.zip" "$APP_NAME.app"
+zip -r -y -q "../FFT_Universal_macOS.zip" "$APP_NAME.app"
 cd ..
+ARCHIVE_SIZE=$(du -sh FFT_Universal_macOS.zip | cut -f1)
 
 echo ""
 echo "=== Done! ==="
 echo "App bundle: $APP_PATH"
-echo "Archive:    FFT_Universal_macOS.zip"
+echo "Archive:    FFT_Universal_macOS.zip ($ARCHIVE_SIZE)"
 echo ""
 echo "To run: open $APP_PATH"
 echo "To distribute: share FFT_Universal_macOS.zip"
