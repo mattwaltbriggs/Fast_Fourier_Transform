@@ -22,6 +22,51 @@ Sine sweep 10 to 40 Hz 1G at 0.5 octave
 ![](/Fast_fourier_transform/Images/sinesweep_td.png)<br /><br />
 ![](/Fast_fourier_transform/Images/sinesweep_fft.png)<br /><br />
 
+# Building for macOS
+
+## Pre-built Release
+
+Download the latest `FFT_Universal_macOS.zip` from [Releases](https://github.com/mattwaltbriggs/Fast_Fourier_Transform/releases). Unzip and run `FFT.app`. No dependencies required.
+
+## Build from Source
+
+### Prerequisites
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+- macOS 13.0 or later
+
+### Steps
+
+1. Clone the repository:
+```bash
+git clone https://github.com/mattwaltbriggs/Fast_Fourier_Transform.git
+cd Fast_Fourier_Transform
+```
+
+2. Run the build script:
+```bash
+chmod +x build_macos.sh
+./build_macos.sh
+```
+
+3. The script will:
+   - Publish self-contained builds for both Apple Silicon (arm64) and Intel (x64)
+   - Create a universal binary using `lipo`
+   - Package everything into a macOS `.app` bundle
+   - Output `FFT.app` in `build/` and `FFT_Universal_macOS.zip` in the project root
+
+4. To run the app:
+```bash
+open build/FFT.app
+```
+
+### Build Output
+
+| Path | Description |
+|---|---|
+| `build/FFT.app` | macOS application bundle (universal binary) |
+| `FFT_Universal_macOS.zip` | Distributable archive for sharing |
+
 # References  <br />
 •	 https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm  <br />
 •	 https://rosettacode.org/wiki/Fast_Fourier_transform#C.23  <br />
